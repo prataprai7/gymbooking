@@ -41,7 +41,7 @@ const Navbar = () => {
 
                 {/* Logo */}
                 <Link to='/'>
-                    <img src={assets.bb} alt="logo" className={`h-9 ${isScrolled && "invert opacity-80"}`} />
+                    <img src={assets.bayam} alt="logo" className={`h-9 ${isScrolled && "invert opacity-80"}`} />
                 </Link>
 
                 {/* Desktop Nav */}
