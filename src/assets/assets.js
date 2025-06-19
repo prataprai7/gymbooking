@@ -82,7 +82,7 @@ export const cities = [
     "Kathmandu",
     "Pokhara",
     "Dharan",
-    "Butwal",
+    "Chitwan",
 ];
 
 // Exclusive Offers Dummy Data
