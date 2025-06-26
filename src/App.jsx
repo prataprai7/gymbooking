@@ -4,6 +4,7 @@ import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home';
 import Footer from './components/Footer';
 import AllGyms from './pages/AllGyms';
+import GymDetails from './pages/GymDetails';
 
 const App =()=> {
 
@@ -14,8 +15,8 @@ const App =()=> {
       <div className='min-h-[70vh'>
         <Routes>
           <Route path='/' element={<Home/>}/>
-          <Route path='/gyms' element={<AllGyms/>}/>
-
+          <Route path='/rooms' element={<AllGyms/>}/>
+          <Route path='/gyms/:id' element={<GymDetails/>}/>
         </Routes>
       </div>
 
