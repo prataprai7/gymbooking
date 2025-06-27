@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Footer from './components/Footer';
 import AllGyms from './pages/AllGyms';
 import GymDetails from './pages/GymDetails';
+import MyBookings from './pages/MyBookings';
 
 const App =()=> {
 
@@ -17,6 +18,7 @@ const App =()=> {
           <Route path='/' element={<Home/>}/>
           <Route path='/rooms' element={<AllGyms/>}/>
           <Route path='/gyms/:id' element={<GymDetails/>}/>
+          <Route path='/my-bookings' element={<MyBookings/>}/>
         </Routes>
       </div>
 
