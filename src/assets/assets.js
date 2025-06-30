@@ -134,7 +134,7 @@ export const userDummyData = {
 // Hotel Dummy Data
 export const hotelDummyData = {
     "_id": "67f76393197ac559e4089b72",
-    "name": "Ox Strength Training Ground",
+    "name": "Ox Strength",
     "address": "Budhanilkantha, Kathmandu",
     "contact": "01-5920854",
     "owner": userDummyData,
