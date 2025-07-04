@@ -23,7 +23,7 @@ import badgeIcon from './badgeIcon.svg'
 import menuIcon from './menuIcon.svg'
 import closeMenu from './closeMenu.svg'
 import guestsIcon from './guestsIcon.svg'
-import roomImg2 from './roomImg2.png'
+import roomImg2 from './roomImg2.jpeg'
 import roomImg3 from './roomImg3.png'
 import roomImg4 from './roomImg4.png'
 import regImage from './regImage.jpg'
@@ -38,7 +38,13 @@ import totalBookingIcon from "./totalBookingIcon.svg";
 import totalRevenueIcon from "./totalRevenueIcon.svg";
 import bayam from './bayam.svg'
 import oxpl1 from './oxpl1.jpg'
-
+import alt from './alt.jpg'
+import pp from './pp.png'
+import pw from './pw.jpeg'
+import pw2 from './pw2.jpg'
+import alt2 from './alt2.jpg'
+import altt from './altt.jpg'
+import altlast from './altlast.jpg'
 
 export const assets = {
     logo,
@@ -74,7 +80,15 @@ export const assets = {
     totalBookingIcon,
     totalRevenueIcon,
     bayam, 
-    oxpl1
+    oxpl1,
+    alt,
+    pp,
+    pw,
+    pw2,
+    alt2,
+    altt,
+    altlast,
+
 }
 
 export const cities = [
@@ -102,9 +116,6 @@ export const testimonials = [
 // Facility Icon
 export const facilityIcons = {
     "Free WiFi": assets.freeWifiIcon,
-    "Free Breakfast": assets.freeBreakfastIcon,
-    "Room Service": assets.roomServiceIcon,
-    "Mountain View": assets.mountainIcon,
     "Pool Access": assets.poolIcon,
 };
 
@@ -119,7 +130,7 @@ export const roomCommonData = [
 // User Dummy Data
 export const userDummyData = {
     "_id": "user_2unqyL4diJFP1E3pIBnasc7w8hP",
-    "username": "Great Stack",
+    "username": "Ox Strength",
     "email": "user.greatstack@gmail.com",
     "image": "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvdXBsb2FkZWQvaW1nXzJ2N2c5YVpSSEFVYVUxbmVYZ2JkSVVuWnFzWSJ9",
     "role": "hotelOwner",
@@ -134,7 +145,7 @@ export const userDummyData = {
 // Hotel Dummy Data
 export const hotelDummyData = {
     "_id": "67f76393197ac559e4089b72",
-    "name": "Ox Strength",
+    "name": "Ox Strength Training Ground",
     "address": "Budhanilkantha, Kathmandu",
     "contact": "01-5920854",
     "owner": userDummyData,
@@ -149,10 +160,10 @@ export const roomsDummyData = [
     {
         "_id": "67f7647c197ac559e4089b96",
         "hotel": hotelDummyData,
-        "roomType": "Double Bed",
+        "roomType": "Power Lifting",
         "pricePerMonth": 39.9,
-        "amenities": ["Room Service", "Mountain View", "Pool Access"],
-        "images": [oxpl1, roomImg2, roomImg3, roomImg4],
+        "amenities": ["Free Wifi", "Pool Access"],
+        "images": [oxpl1, roomImg2, pw, pw2],
         "isAvailable": true,
         "createdAt": "2025-04-10T06:26:04.013Z",
         "updatedAt": "2025-04-10T06:26:04.013Z",
@@ -161,10 +172,10 @@ export const roomsDummyData = [
     {
         "_id": "67f76452197ac559e4089b8e",
         "hotel": hotelDummyData,
-        "roomType": "Double Bed",
+        "roomType": "Body Building",
         "pricePerMonth": 29.9,
-        "amenities": ["Room Service", "Mountain View", "Pool Access"],
-        "images": [roomImg2, roomImg3, roomImg4],
+        "amenities": ["Free Wifi", "Pool Access"],
+        "images": [altt, alt, alt2, altlast],
         "isAvailable": true,
         "createdAt": "2025-04-10T06:25:22.593Z",
         "updatedAt": "2025-04-10T06:25:22.593Z",
@@ -173,10 +184,10 @@ export const roomsDummyData = [
     {
         "_id": "67f76406197ac559e4089b82",
         "hotel": hotelDummyData,
-        "roomType": "Double Bed",
+        "roomType": "Hyrox Training",
         "pricePerMonth": 24.9,
-        "amenities": ["Free WiFi", "Free Breakfast", "Room Service"],
-        "images": [roomImg3, roomImg4, roomImg2],
+        "amenities": ["Free Wifi", "Pool Access"],
+        "images": [pp, roomImg4, roomImg2],
         "isAvailable": true,
         "createdAt": "2025-04-10T06:24:06.285Z",
         "updatedAt": "2025-04-10T06:24:06.285Z",
@@ -185,9 +196,9 @@ export const roomsDummyData = [
     {
         "_id": "67f763d8197ac559e4089b7a",
         "hotel": hotelDummyData,
-        "roomType": "Single Bed",
+        "roomType": "Weight Lifting",
         "pricePerMonth": 19.9,
-        "amenities": ["Free WiFi", "Room Service", "Pool Access"],
+        "amenities": ["Free Wifi", "Pool Access"],
         "images": [roomImg4, roomImg2, roomImg3],
         "isAvailable": true,
         "createdAt": "2025-04-10T06:23:20.252Z",
