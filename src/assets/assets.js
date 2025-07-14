@@ -101,8 +101,8 @@ export const cities = [
 
 // Exclusive Offers Dummy Data
 export const exclusiveOffers = [
-    { _id: 1, title: "Summer Escape Package", description: "Enjoy a complimentary night and daily breakfast", priceOff: 25, expiryDate: "Aug 31", image: offer1 },
-    { _id: 2, title: "Romantic Getaway", description: "Special couples package including spa treatment", priceOff: 20, expiryDate: "Sep 20", image: offer2 },
+    { _id: 1, title: "Summer Body Package", description: "This is your year to shine! Our exclusive offer gives you everything you need to get lean, toned and confident just in time", priceOff: 25, expiryDate: "Aug 31", image: offer1 },
+    { _id: 2, title: "Special Couples Package", description: "Bring your partner and double the results with our exclusive Couple's Package!", priceOff: 20, expiryDate: "Sep 20", image: offer2 },
     { _id: 3, title: "Luxury Retreat", description: "Book 60 days in advance and save on your stay at any of our luxury properties worldwide.", priceOff: 30, expiryDate: "Sep 25", image: offer3 },
 ]
 
@@ -115,7 +115,7 @@ export const testimonials = [
 
 // Facility Icon
 export const facilityIcons = {
-    "Free WiFi": assets.freeWifiIcon,
+    "Free Wifi": assets.freeWifiIcon,
     "Pool Access": assets.poolIcon,
 };
 
@@ -174,7 +174,7 @@ export const roomsDummyData = [
         "hotel": hotelDummyData,
         "roomType": "Body Building",
         "pricePerMonth": 29.9,
-        "amenities": ["Free Wifi", "Pool Access"],
+        "amenities": [ "Pool Access", "Free Wifi"],
         "images": [altt, alt, alt2, altlast],
         "isAvailable": true,
         "createdAt": "2025-04-10T06:25:22.593Z",
@@ -205,6 +205,7 @@ export const roomsDummyData = [
         "updatedAt": "2025-04-10T06:23:20.252Z",
         "__v": 0
     }
+    
 ]
 
 

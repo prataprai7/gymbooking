@@ -13,7 +13,7 @@ const ExclusiveOffers = () => {
                 offers and special packages to enhance your training and
                 create unforgettable memories.' />
                 <button className='group flex items-center gap-2 font-medium 
-                cursor-pointer max-md:mt-12'>
+                cursor-pointer max-md:mt-12 '>
                     View All Offers
                     <img src={assets.arrowIcon} 
                     alt="arrow-icon"
