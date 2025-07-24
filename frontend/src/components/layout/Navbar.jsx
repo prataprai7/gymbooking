@@ -34,9 +34,9 @@ const Navbar = () => {
   }
 
   const navLinks = [
-    { name: 'Home', path: '/', icon: '🏠' },
-    { name: 'Gyms', path: '/gyms', icon: '💪' },
-    { name: 'Membership', path: '/membership', icon: '🎯' },
+    { name: 'Home', path: '/' },
+    { name: 'Gyms', path: '/gyms' },
+    { name: 'Membership', path: '/membership', },
   ]
 
   return (
@@ -45,9 +45,6 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="p-2 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg transform group-hover:scale-105 transition-transform duration-200">
-              <Dumbbell className="h-6 w-6 text-white" />
-            </div>
             <span className="text-2xl font-bold text-gradient">BayamBook</span>
           </Link>
 
