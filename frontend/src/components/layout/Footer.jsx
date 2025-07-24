@@ -16,28 +16,28 @@ const Footer = () => {
 
   const footerLinks = {
     company: [
-      { name: 'हाम्रो बारेमा', path: '/about' },
-      { name: 'सम्पर्क', path: '/contact' },
-      { name: 'करियर', path: '/careers' },
-      { name: 'समाचार', path: '/news' }
+      { name: 'About Us', path: '/about' },
+      { name: 'Contact', path: '/contact' },
+      { name: 'Careers', path: '/careers' },
+      { name: 'News', path: '/news' }
     ],
     services: [
-      { name: 'जिम खोज्नुहोस्', path: '/gyms' },
-      { name: 'सदस्यता योजनाहरू', path: '/membership' },
-      { name: 'जिम रजिस्टर गर्नुहोस्', path: '/register?type=gym_owner' },
-      { name: 'बूस्ट सेवा', path: '/boost' }
+      { name: 'Find Gyms', path: '/gyms' },
+      { name: 'Membership Plans', path: '/membership' },
+      { name: 'Register Gym', path: '/register?type=gym_owner' },
+      { name: 'Boost Service', path: '/boost' }
     ],
     support: [
-      { name: 'मद्दत केन्द्र', path: '/help' },
-      { name: 'नीति', path: '/privacy' },
-      { name: 'सर्तहरू', path: '/terms' },
+      { name: 'Help Center', path: '/help' },
+      { name: 'Privacy Policy', path: '/privacy' },
+      { name: 'Terms of Service', path: '/terms' },
       { name: 'FAQ', path: '/faq' }
     ]
   }
 
   const nepalCities = [
-    'काठमाडौं', 'पोखरा', 'ललितपुर', 'भक्तपुर', 'बिराटनगर', 
-    'धरान', 'बुटवल', 'नेपालगञ्ज', 'हेटौडा', 'धनगढी'
+    'Kathmandu', 'Pokhara', 'Lalitpur', 'Bhaktapur', 'Biratnagar', 
+    'Dharan', 'Butwal', 'Nepalgunj', 'Hetauda', 'Dhangadhi'
   ]
 
   return (
@@ -54,7 +54,7 @@ const Footer = () => {
               <span className="text-2xl font-bold text-gradient">BayamBook</span>
             </Link>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              नेपालको सबैभन्दा ठूलो जिम बुकिङ प्लेटफर्म। आफ्नो नजिकको उत्तम जिम फेला पार्नुहोस् र स्वस्थ जीवन सुरु गर्नुहोस्।
+              Nepal's largest gym booking platform. Find the best gyms near you and start your fitness journey today.
             </p>
             
             {/* Contact Info */}
@@ -69,14 +69,14 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-4 w-4 text-primary-400" />
-                <span className="text-gray-300">काठमाडौं, नेपाल</span>
+                <span className="text-gray-300">Kathmandu, Nepal</span>
               </div>
             </div>
           </div>
 
           {/* Company Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">कम्पनी</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Company</h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -93,7 +93,7 @@ const Footer = () => {
 
           {/* Services Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">सेवाहरू</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Services</h3>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
@@ -110,7 +110,7 @@ const Footer = () => {
 
           {/* Support Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">सहायता</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Support</h3>
             <ul className="space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
@@ -128,7 +128,7 @@ const Footer = () => {
 
         {/* Popular Cities */}
         <div className="mt-12 pt-8 border-t border-gray-800">
-          <h3 className="text-lg font-semibold mb-4 text-white">लोकप्रिय शहरहरू</h3>
+          <h3 className="text-lg font-semibold mb-4 text-white">Popular Cities</h3>
           <div className="flex flex-wrap gap-2">
             {nepalCities.map((city) => (
               <Link
@@ -179,11 +179,11 @@ const Footer = () => {
             <div className="flex items-center space-x-2">
               <input
                 type="email"
-                placeholder="आफ्नो इमेल राख्नुहोस्"
+                placeholder="Enter your email"
                 className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
               />
               <button className="btn-primary whitespace-nowrap">
-                सदस्यता लिनुहोस्
+                Subscribe
               </button>
             </div>
           </div>
@@ -195,7 +195,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center space-x-2 text-gray-400">
-              <span>&copy; {currentYear} BayamBook. सबै अधिकार सुरक्षित।</span>
+              <span>&copy; {currentYear} BayamBook. All rights reserved.</span>
             </div>
             <div className="flex items-center space-x-1 text-gray-400">
               <span>Made with</span>

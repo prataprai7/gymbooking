@@ -19,10 +19,10 @@ import ScrollToTop from './components/common/ScrollToTop'
 function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 flex flex-col">
         <ScrollToTop />
         <Navbar />
-        <main className="flex-1">
+        <main className="flex-1 pt-16 pb-0">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />

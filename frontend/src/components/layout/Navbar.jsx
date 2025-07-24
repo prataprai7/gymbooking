@@ -34,13 +34,13 @@ const Navbar = () => {
   }
 
   const navLinks = [
-    { name: 'होम', path: '/', icon: '🏠' },
-    { name: 'जिमहरू', path: '/gyms', icon: '💪' },
-    { name: 'सदस्यता', path: '/membership', icon: '🎯' },
+    { name: 'Home', path: '/', icon: '🏠' },
+    { name: 'Gyms', path: '/gyms', icon: '💪' },
+    { name: 'Membership', path: '/membership', icon: '🎯' },
   ]
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <nav className="bg-white shadow-lg fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -101,7 +101,7 @@ const Navbar = () => {
                         onClick={() => setShowUserMenu(false)}
                       >
                         <BarChart3 className="h-4 w-4" />
-                        <span>ड्यासबोर्ड</span>
+                        <span>Dashboard</span>
                       </Link>
                       <Link
                         to="/profile"
@@ -109,7 +109,7 @@ const Navbar = () => {
                         onClick={() => setShowUserMenu(false)}
                       >
                         <User className="h-4 w-4" />
-                        <span>प्रोफाइल</span>
+                        <span>Profile</span>
                       </Link>
                       <Link
                         to="/membership"
@@ -117,14 +117,14 @@ const Navbar = () => {
                         onClick={() => setShowUserMenu(false)}
                       >
                         <Heart className="h-4 w-4" />
-                        <span>मेरो सदस्यता</span>
+                        <span>My Memberships</span>
                       </Link>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50"
                       >
                         <LogOut className="h-4 w-4" />
-                        <span>लगआउट</span>
+                        <span>Logout</span>
                       </button>
                     </motion.div>
                   )}
@@ -136,13 +136,13 @@ const Navbar = () => {
                   to="/login"
                   className="text-gray-700 hover:text-primary-600 font-medium transition-colors duration-200"
                 >
-                  लगइन
+                  Login
                 </Link>
                 <Link
                   to="/register"
                   className="btn-primary"
                 >
-                  साइन अप
+                  Sign Up
                 </Link>
               </div>
             )}
@@ -197,7 +197,7 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                     >
                       <BarChart3 className="h-4 w-4" />
-                      <span>ड्यासबोर्ड</span>
+                      <span>Dashboard</span>
                     </Link>
                     <Link
                       to="/profile"
@@ -205,14 +205,14 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                     >
                       <User className="h-4 w-4" />
-                      <span>प्रोफाइल</span>
+                      <span>Profile</span>
                     </Link>
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center space-x-2 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg"
                     >
                       <LogOut className="h-4 w-4" />
-                      <span>लगआउट</span>
+                      <span>Logout</span>
                     </button>
                   </div>
                 ) : (
@@ -222,14 +222,14 @@ const Navbar = () => {
                       className="block px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      लगइन
+                      Login
                     </Link>
                     <Link
                       to="/register"
                       className="block px-4 py-3 bg-primary-600 text-white rounded-lg font-medium text-center"
                       onClick={() => setIsOpen(false)}
                     >
-                      साइन अप
+                      Sign Up
                     </Link>
                   </div>
                 )}
