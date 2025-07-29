@@ -37,8 +37,52 @@ const AllGyms = () => {
     const [selectedPriceRanges, setSelectedPriceRanges] = useState([]);
     const [sortOption, setSortOption] = useState(null);
 
-    const roomTypes = ["Couple", "Group", "Student", "Elderly"];
-    const priceRanges = ['0 to 5', '10 to 25', '30 to 50', '70 above'];
+    // Create unique gym data for each room
+    const gymsData = [
+        {
+            name: "Ox Strength Training Ground",
+            city: "Kathmandu",
+            address: "Budhanilkantha, Kathmandu",
+            contact: "01-5920854",
+            rating: 4.5,
+            reviews: 128
+        },
+        {
+            name: "Athele Land",
+            city: "Lalitpur",
+            address: "Imadol, Lalitpur",
+            contact: "01-6839472",
+            rating: 4.2,
+            reviews: 96
+        },
+        {
+            name: "Elite Fitness Hub",
+            city: "Lalitpur",
+            address: "Lakeside, Pokhara",
+            contact: "01-5526371",
+            rating: 4.7,
+            reviews: 145
+        },
+        {
+            name: "Powerhouse Gym",
+            city: "Bhaktapur",
+            address: "Durbar Square, Bhaktapur",
+            contact: "01-6612345",
+            rating: 4.3,
+            reviews: 87
+        }
+    ];
+
+    // Enhance rooms data with unique gym information
+    const enhancedRoomsData = roomsDummyData.map((room, index) => ({
+        ...room,
+        hotel: gymsData[index % gymsData.length], // Cycle through gyms data
+        rating: gymsData[index % gymsData.length].rating,
+        reviews: gymsData[index % gymsData.length].reviews
+    }));
+
+    const roomTypes = ["Power Lifting", "Body Building", "Hyrox Training", "Weight Lifting"];
+    const priceRanges = ['0 to 20', '20 to 30', '30 to 40', '40 above'];
     const sortOptions = ["Price Low to High", "Price High to Low", "Newest First"];
 
     const handleRoomTypeChange = (checked, type) => {
@@ -68,7 +112,7 @@ const AllGyms = () => {
     };
 
     const filterAndSortRooms = () => {
-        let filteredRooms = [...roomsDummyData];
+        let filteredRooms = [...enhancedRoomsData];
 
         // Apply room type filters
         if (selectedRoomTypes.length > 0) {
@@ -81,10 +125,10 @@ const AllGyms = () => {
         if (selectedPriceRanges.length > 0) {
             filteredRooms = filteredRooms.filter(room => {
                 return selectedPriceRanges.some(range => {
-                    const [min, max] = range.split(' to ').map(Number);
-                    if (range.includes('above')) {
-                        return room.pricePerMonth >= 70;
+                    if (range === '40 above') {
+                        return room.pricePerMonth >= 40;
                     }
+                    const [min, max] = range.split(' to ').map(Number);
                     return room.pricePerMonth >= min && room.pricePerMonth <= max;
                 });
             });
@@ -115,58 +159,67 @@ const AllGyms = () => {
                 <div className='flex flex-col items-start text-left'>
                     <h1 className='font-playfair text-4xl md:text-[40px]'>Gym Rooms</h1>
                     <p className='text-sm md:text-base text-gray-500/90 mt-2 max-w-174'>
-                        Take advantage of our limited-time offers and special packages 
-                        to enhance your stay and create unforgettable memories.
+                        Explore our premium gym facilities with state-of-the-art equipment and professional trainers.
                     </p>
                 </div>
 
-                {filteredRooms.map((room) => (
-                    <div key={room._id} className='flex flex-col md:flex-row items-start py-10 gap-6 border-b border-gray-300 last:pb-30 last:border-0'>
-                        <img 
-                            onClick={() => {
-                                navigate(`/rooms/${room._id}`); 
-                                window.scrollTo(0, 0);
-                            }}
-                            src={room.images[0]} 
-                            alt="gyms-img" 
-                            title='View Gym Details'
-                            className='max-h-65 md:w-1/2 rounded-xl shadow-lg object-cover cursor-pointer'
-                        />
-                        <div className='md:w-1/2 flex flex-col gap-2'>
-                            <p className='text-gray-500'>{room.hotel.city}</p>
-                            <p 
+                {filteredRooms.length > 0 ? (
+                    filteredRooms.map((room) => (
+                        <div key={room._id} className='flex flex-col md:flex-row items-start py-10 gap-6 border-b border-gray-300 last:pb-30 last:border-0'>
+                            <img 
                                 onClick={() => {
                                     navigate(`/rooms/${room._id}`); 
                                     window.scrollTo(0, 0);
                                 }}
-                                className='text-gray-800 text-3xl font-playfair cursor-pointer'
-                            >
-                                {room.hotel.name}
-                            </p>
-                            <div className='flex items-center'>
-                                <StarRating rating={room.rating} />
-                                <p className='ml-2'>{room.reviews}+ reviews</p>
-                            </div>    
-                            <div className='flex items-center gap-1 text-gray-500 mt-2 text-sm'>
-                                <img src={assets.locationIcon} alt='location-icon'/>
-                                <span>{room.hotel.address}</span>
+                                src={room.images[0]} 
+                                alt="gyms-img" 
+                                title='View Gym Details'
+                                className='max-h-65 md:w-1/2 rounded-xl shadow-lg object-cover cursor-pointer'
+                            />
+                            <div className='md:w-1/2 flex flex-col gap-2'>
+                                <p className='text-gray-500'>{room.hotel.city}</p>
+                                <p 
+                                    onClick={() => {
+                                        navigate(`/rooms/${room._id}`); 
+                                        window.scrollTo(0, 0);
+                                    }}
+                                    className='text-gray-800 text-3xl font-playfair cursor-pointer'
+                                >
+                                    {room.hotel.name}
+                                </p>
+                                <div className='flex items-center'>
+                                    <StarRating rating={room.rating} />
+                                    <p className='ml-2'>{room.reviews}+ reviews</p>
+                                </div>    
+                                <div className='flex items-center gap-1 text-gray-500 mt-2 text-sm'>
+                                    <img src={assets.locationIcon} alt='location-icon'/>
+                                    <span>{room.hotel.address}</span>
+                                </div>
+                                <div className='flex items-center gap-1 text-gray-500 text-sm'>
+                                    <img src={assets.phoneIcon} alt='phone-icon'/>
+                                    <span>{room.hotel.contact}</span>
+                                </div>
+                                <div className='flex flex-wrap items-center mt-3 mb-6 gap-4'>
+                                    {room.amenities.map((item, index) => (
+                                        <div key={index} className='flex items-center gap-2 px-3 py-2 rounded-lg bg-[#F5F5FF]/70'>
+                                            <img src={facilityIcons[item]} alt={item} className='w-5 h-5'/>
+                                            <p className='text-xs'>{item}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <p className='text-xl font-medium text-gray-700'>${room.pricePerMonth} /Month</p>
+                                <p className='text-sm text-gray-500'>Room Type: {room.roomType}</p>
                             </div>
-                            {/* Gym Amenities */}
-                            <div className='flex flex-wrap items-center mt-3 mb-6 gap-4'>
-                                {room.amenities.map((item, index) => (
-                                    <div key={index} className='flex items-center gap-2 px-3 py-2 rounded-lg bg-[#F5F5FF]/70'>
-                                        <img src={facilityIcons[item]} alt={item} className='w-5 h-5'/>
-                                        <p className='text-xs'>{item}</p>
-                                    </div>
-                                ))}
-                            </div>
-                            {/* Gym price per month */}
-                            <p className='text-xl font-medium text-gray-700'>${room.pricePerMonth} /Month</p>
                         </div>
+                    ))
+                ) : (
+                    <div className='py-10 text-center'>
+                        <p className='text-gray-500'>No gyms match your filters. Try adjusting your search criteria.</p>
                     </div>
-                ))}
+                )}
             </div>
-            {/* Filter */}
+            
+            {/* Filter Sidebar */}
             <div className='bg-white w-full lg:w-80 border border-gray-300 text-gray-600 max-lg:mb-8 lg:mt-16 lg:ml-8'>
                 <div className={`flex items-center justify-between px-5 py-2.5 lg:border-b border-gray-300 ${openFilters && "border-b"}`}>
                     <p className='text-base font-medium text-gray-800'>FILTERS</p>

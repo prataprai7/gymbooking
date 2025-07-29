@@ -12,14 +12,16 @@ import Dashboard from './pages/gymOwner/Dashboard';
 import AddRoom from './pages/gymOwner/AddRoom';
 import ListRoom from './pages/gymOwner/ListRoom';
 
-const App =()=> {
-
+const App = () => {
   const isOwnerPath = useLocation().pathname.includes("owner");
-  return(
-    <div>
+  
+  return (
+    <div className="flex flex-col min-h-screen bg-white">
       {!isOwnerPath && <Navbar/>}
       {false && <GymReg/>}
-      <div className='min-h-[70vh'>
+      
+      {/* Main content area */}
+      <main className="flex-grow">
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/gyms' element={<AllGyms/>}/>
@@ -27,14 +29,14 @@ const App =()=> {
           <Route path='/my-bookings' element={<MyBookings/>}/>
           <Route path='/owner' element={<Layout/>}>
             <Route index element={<Dashboard/>}/>
-            <Route index element={<AddRoom/>}/>
-            <Route index element={<ListRoom/>}/>
+            <Route path="add-room" element={<AddRoom/>}/>
+            <Route path="list-rooms" element={<ListRoom/>}/>
           </Route>
         </Routes>
-      </div>
+      </main>
 
-      <Footer/>
-      
+      {/* Footer */}
+      {!isOwnerPath && <Footer/>}
     </div>
   )
 }
