@@ -2,9 +2,12 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
-// Add auth token to requests
+// Add auth token to requests automatically
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -13,17 +16,16 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth endpoints
-export const registerUser = (userData) => API.post('/auth/register', userData);
-export const loginUser = (credentials) => API.post('/auth/login', credentials);
-export const getCurrentUser = () => API.get('/auth/me');
-
-// Gym endpoints
+// Gym-related API calls
 export const fetchGyms = () => API.get('/gyms');
-export const fetchGymById = (id) => API.get(`/gyms/${id}`);
+export const fetchGymDetails = (id) => API.get(`/gyms/${id}`);
 
-// Booking endpoints
+// Booking-related API calls
 export const createBooking = (bookingData) => API.post('/bookings', bookingData);
-export const fetchUserBookings = () => API.get('/bookings');
+export const getUserBookings = () => API.get('/bookings/my-bookings');
+
+// Auth-related API calls
+export const register = (userData) => API.post('/auth/register', userData);
+export const login = (credentials) => API.post('/auth/login', credentials);
 
 export default API;

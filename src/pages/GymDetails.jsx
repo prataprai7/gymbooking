@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { assets, facilityIcons, roomsDummyData, roomCommonData } from '../assets/assets';
@@ -16,71 +17,10 @@ const GymDetails = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        // Create enhanced rooms data with unique gym info (same as in AllGyms)
-        const gymsData = [
-            {
-                name: "Ox Strength Training Ground",
-                city: "Kathmandu",
-                address: "Budhanilkantha, Kathmandu",
-                contact: "01-5920854",
-                rating: 4.5,
-                reviews: 128,
-                owner: {
-                    name: "John Smith",
-                    image: assets.user1
-                }
-            },
-            {
-                name: "Iron Titans Gym",
-                city: "Pokhara",
-                address: "Lakeside, Pokhara",
-                contact: "01-6839472",
-                rating: 4.2,
-                reviews: 96,
-                owner: {
-                    name: "Sarah Johnson",
-                    image: assets.user2
-                }
-            },
-            {
-                name: "Elite Fitness Hub",
-                city: "Lalitpur",
-                address: "Jawalakhel, Lalitpur",
-                contact: "01-5526371",
-                rating: 4.7,
-                reviews: 145,
-                owner: {
-                    name: "Mike Williams",
-                    image: assets.user3
-                }
-            },
-            {
-                name: "Powerhouse Gym",
-                city: "Bhaktapur",
-                address: "Durbar Square, Bhaktapur",
-                contact: "01-6612345",
-                rating: 4.3,
-                reviews: 87,
-                owner: {
-                    name: "Emma Davis",
-                    image: assets.user4
-                }
-            }
-        ];
-
-        // Find the room and enhance it with unique gym data
         const foundRoom = roomsDummyData.find(room => room._id === id);
         if (foundRoom) {
-            // Get the index to cycle through gyms data
-            const roomIndex = roomsDummyData.findIndex(r => r._id === id);
-            const enhancedRoom = {
-                ...foundRoom,
-                hotel: gymsData[roomIndex % gymsData.length],
-                rating: gymsData[roomIndex % gymsData.length].rating,
-                reviews: gymsData[roomIndex % gymsData.length].reviews
-            };
-            setRoom(enhancedRoom);
-            setMainImage(enhancedRoom.images[0]);
+            setRoom(foundRoom);
+            setMainImage(foundRoom.images[0]);
         }
     }, [id]);
 
@@ -96,12 +36,14 @@ const GymDetails = () => {
         e.preventDefault();
         setIsSubmitting(true);
 
+        // Validate dates
         if (!bookingData.startDate || !bookingData.expiryDate) {
             alert('Please select both start and expiry dates');
             setIsSubmitting(false);
             return;
         }
 
+        // Create booking object
         const newBooking = {
             _id: `booking-${Date.now()}`,
             hotel: {
@@ -110,8 +52,7 @@ const GymDetails = () => {
             },
             room: {
                 images: room.images,
-                roomType: room.roomType,
-                pricePerMonth: room.pricePerMonth
+                roomType: room.roomType
             },
             checkInDate: bookingData.startDate,
             checkOutDate: bookingData.expiryDate,
@@ -122,9 +63,12 @@ const GymDetails = () => {
         };
 
         try {
+            // Save to localStorage
             const existingBookings = JSON.parse(localStorage.getItem('userBookings')) || [];
             const updatedBookings = [...existingBookings, newBooking];
             localStorage.setItem('userBookings', JSON.stringify(updatedBookings));
+
+            // Redirect to My Bookings page
             navigate('/my-bookings', { state: { bookingSuccess: true } });
         } catch (error) {
             console.error('Error saving booking:', error);
@@ -151,20 +95,14 @@ const GymDetails = () => {
 
             {/* Gym Rating */}
             <div className='flex items-center gap-1 mt-2'>
-                <StarRating rating={room.rating} />
-                <p className='ml-2'>{room.reviews}+ reviews</p>
+                <StarRating />
+                <p className='ml-2'>200+ reviews</p>
             </div>
 
-            {/* Gym Address and Contact */}
-            <div className='flex flex-col gap-1 mt-2'>
-                <div className='flex items-center gap-1'>
-                    <img src={assets.locationIcon} alt='location-icon' className='w-4 h-4'/>
-                    <span>{room.hotel.address}, {room.hotel.city}</span>
-                </div>
-                <div className='flex items-center gap-1'>
-                    <img src={assets.phoneIcon} alt='phone-icon' className='w-4 h-4'/>
-                    <span>{room.hotel.contact}</span>
-                </div>
+            {/* Gym Address */}
+            <div className='flex items-center gap-1 mt-2'>
+                <img src={assets.locationIcon} alt='location-icon' className='w-4 h-4'/>
+                <span>{room.hotel.address}</span>
             </div>
 
             {/* Gym Images Gallery */}
@@ -195,7 +133,7 @@ const GymDetails = () => {
             <div className='flex flex-col md:flex-row md:justify-between mt-10'>
                 <div className='flex flex-col'>
                     <h1 className='text-3xl md:text-4xl font-playfair'>
-                        {room.roomType} Experience
+                        Experience Luxury Like Never Before
                     </h1>
                     <div className='flex flex-wrap items-center mt-3 mb-6 gap-4'>
                         {room.amenities.map((item, index) => (
@@ -207,10 +145,7 @@ const GymDetails = () => {
                     </div>
                 </div>
                 {/* Gym Price */}
-                <div className='flex flex-col items-end'>
-                    <p className='text-2xl font-medium'>${room.pricePerMonth}/month</p>
-                    <p className='text-sm text-gray-500'>per member</p>
-                </div>
+                <p className='text-2xl font-medium'>${room.pricePerMonth}/month</p>
             </div>
 
             {/* Booking Form */}
@@ -284,11 +219,11 @@ const GymDetails = () => {
             {/* Gym Description */}
             <div className='max-w-3xl border-y border-gray-300 my-16 py-10 text-gray-500'> 
                 <p>
-                    {room.roomType} slots are assigned based on availability at {room.hotel.name}. 
-                    Experience our premium {room.roomType.toLowerCase()} facilities with state-of-the-art equipment. 
+                    Workout slots are assigned on the ground floor based on availability.
+                    Experience our premium gym with a true urban fitness atmosphere. 
                     The listed price is for individual members—adjust the number of members in your group to see accurate pricing.
-                    Training zones are allocated upon availability at our {room.hotel.city} location. 
-                    Enjoy our modern, high-energy gym designed for the ultimate workout experience.
+                    Ground floor training zones are allocated upon availability. 
+                    Enjoy our modern, high-energy gym designed for the ultimate city workout experience.
                 </p>
             </div>
             
@@ -303,8 +238,8 @@ const GymDetails = () => {
                     <div>
                         <p className='text-lg md:text-xl'>Hosted by {room.hotel.owner.name}</p>
                         <div className='flex items-center mt-1'>
-                            <StarRating rating={room.rating} />
-                            <p className='ml-2'>{room.reviews}+ reviews</p>
+                            <StarRating />
+                            <p className='ml-2'>200+ reviews</p>
                         </div>
                     </div>
                 </div>
