@@ -1,11 +1,16 @@
 import axios from 'axios';
 
-const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
 
 // Add auth token to requests
-API.interceptors.request.use((config) => {
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -13,17 +18,28 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth endpoints
-export const registerUser = (userData) => API.post('/auth/register', userData);
-export const loginUser = (credentials) => API.post('/auth/login', credentials);
-export const getCurrentUser = () => API.get('/auth/me');
+// Auth API functions
+export const login = async (credentials) => {
+  const response = await api.post('/auth/login', credentials);
+  return response.data;
+};
 
-// Gym endpoints
-export const fetchGyms = () => API.get('/gyms');
-export const fetchGymById = (id) => API.get(`/gyms/${id}`);
+export const register = async (userData) => {
+  const response = await api.post('/auth/register', userData);
+  return response.data;
+};
 
-// Booking endpoints
-export const createBooking = (bookingData) => API.post('/bookings', bookingData);
-export const fetchUserBookings = () => API.get('/bookings');
+export const logout = async () => {
+  await api.post('/auth/logout');
+};
 
-export default API;
+export const getCurrentUser = async () => {
+  try {
+    const response = await api.get('/auth/me');
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+};
+
+export default api;

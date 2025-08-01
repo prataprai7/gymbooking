@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
+import { login, register, logout, getCurrentUser } from '../services/api';
 
 const BookIcon = () => (
   <svg className="w-4 h-4 text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -21,9 +22,17 @@ const Navbar = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [user, setUser] = useState(null);
+  const [authError, setAuthError] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Handle scroll effect
   useEffect(() => {
     if (location.pathname !== '/') {
       setIsScrolled(true);
@@ -38,39 +47,71 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
+  // Check for logged in user on mount
   useEffect(() => {
-    const loggedInUser = localStorage.getItem('user');
-    if (loggedInUser) {
+    const checkAuth = async () => {
       try {
-        const parsedUser = JSON.parse(loggedInUser);
-        if (parsedUser?.name) {
-          setUser(parsedUser);
+        const userData = await getCurrentUser();
+        if (userData) {
+          setUser(userData);
         }
-      } catch (e) {
-        console.error("Failed to parse user data", e);
+      } catch (error) {
+        console.error("Failed to fetch user", error);
       }
-    }
+    };
+    checkAuth();
   }, []);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    const userData = { name: "Demo User", email: "user@example.com" };
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    setShowAuthModal(false);
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+    setAuthError('');
   };
 
-  const handleSignup = (e) => {
+  const handleAuthSubmit = async (e) => {
     e.preventDefault();
-    const userData = { name: "Demo User", email: "user@example.com" };
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    setShowAuthModal(false);
+    setAuthError('');
+    setIsLoading(true);
+
+    try {
+      let response;
+      if (isLogin) {
+        response = await login({
+          email: formData.email,
+          password: formData.password
+        });
+      } else {
+        if (!formData.name) {
+          throw new Error('Name is required');
+        }
+        response = await register({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        });
+      }
+      
+      setUser(response.user);
+      setShowAuthModal(false);
+      setFormData({ name: '', email: '', password: '' });
+    } catch (error) {
+      setAuthError(error.message || 'Authentication failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setUser(null);
+      navigate('/');
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   const getUserInitial = () => {
@@ -98,12 +139,14 @@ const Navbar = () => {
               <div className={`${isScrolled ? "bg-gray-700" : "bg-white"} h-0.5 w-0 group-hover:w-full transition-all duration-300`} />
             </Link>
           ))}
-          <button 
-            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`} 
-            onClick={() => navigate('/owner')}
-          >
-            Dashboard
-          </button>
+          {user?.role === 'owner' && (
+            <button 
+              className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`} 
+              onClick={() => navigate('/owner')}
+            >
+              Dashboard
+            </button>
+          )}
         </div>
 
         {/* Desktop Right */}
@@ -119,11 +162,11 @@ const Navbar = () => {
               </button>
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
                 <button 
-                  onClick={() => navigate('/my-booking')}
+                  onClick={() => navigate('/my-bookings')}
                   className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                 >
                   <BookIcon className="mr-2" />
-                  My Booking
+                  My Bookings
                 </button>
                 <button 
                   onClick={handleLogout}
@@ -136,7 +179,7 @@ const Navbar = () => {
           ) : (
             <button 
               onClick={() => setShowAuthModal(true)} 
-              className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500"
+              className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500 hover:bg-gray-800"
             >
               Login
             </button>
@@ -154,7 +197,7 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)} 
             src={assets.menuIcon} 
             alt="menu" 
-            className={`${isScrolled && 'invert'} h-4`} 
+            className={`${isScrolled && 'invert'} h-4 cursor-pointer`} 
           />
         </div>
 
@@ -177,23 +220,25 @@ const Navbar = () => {
 
           {user ? (
             <>
+              {user.role === 'owner' && (
+                <button 
+                  className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all" 
+                  onClick={() => {
+                    navigate('/owner');
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  Dashboard
+                </button>
+              )}
               <button 
                 className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all" 
                 onClick={() => {
-                  navigate('/owner');
+                  navigate('/my-bookings');
                   setIsMenuOpen(false);
                 }}
               >
-                Dashboard
-              </button>
-              <button 
-                className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all" 
-                onClick={() => {
-                  navigate('/my-booking');
-                  setIsMenuOpen(false);
-                }}
-              >
-                My Booking
+                My Bookings
               </button>
               <button 
                 onClick={() => {
@@ -211,7 +256,7 @@ const Navbar = () => {
                 setShowAuthModal(true);
                 setIsMenuOpen(false);
               }} 
-              className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500"
+              className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500 hover:bg-gray-800"
             >
               Login
             </button>
@@ -222,15 +267,16 @@ const Navbar = () => {
       {/* Auth Modal */}
       {showAuthModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-          {/* Semi-transparent overlay */}
           <div 
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setShowAuthModal(false)}
+            onClick={() => {
+              setShowAuthModal(false);
+              setAuthError('');
+              setFormData({ name: '', email: '', password: '' });
+            }}
           />
           
-          {/* Modal Content */}
           <div className="relative bg-white rounded-2xl overflow-hidden w-full max-w-md z-10 shadow-xl">
-            {/* Decorative header */}
             <div className="bg-gradient-to-r from-gray-900 to-gray-700 p-6 text-center">
               <h2 className="text-3xl font-bold text-white">
                 {isLogin ? 'Welcome Back' : 'Join Us'}
@@ -240,7 +286,13 @@ const Navbar = () => {
               </p>
             </div>
             
-            <form onSubmit={isLogin ? handleLogin : handleSignup} className="p-6 space-y-4">
+            <form onSubmit={handleAuthSubmit} className="p-6 space-y-4">
+              {authError && (
+                <div className="text-red-500 text-sm text-center p-2 bg-red-50 rounded">
+                  {authError}
+                </div>
+              )}
+
               {!isLogin && (
                 <div>
                   <label className="block text-gray-700 mb-2 text-sm font-medium" htmlFor="name">
@@ -249,6 +301,8 @@ const Navbar = () => {
                   <input
                     id="name"
                     type="text"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
                     placeholder="John Doe"
                     required
@@ -263,6 +317,8 @@ const Navbar = () => {
                 <input
                   id="email"
                   type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
                   placeholder="your@email.com"
                   required
@@ -276,85 +332,46 @@ const Navbar = () => {
                 <input
                   id="password"
                   type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition"
                   placeholder="••••••••"
                   required
+                  minLength="8"
                 />
               </div>
               
-              {isLogin && (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                      Remember me
-                    </label>
-                  </div>
-                  {/* <a href="#" className="text-sm text-gray-600 hover:text-gray-900">
-                    Forgot password?
-                  </a> */}
-                </div>
-              )}
-              
               <button
                 type="submit"
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3 px-4 rounded-lg transition font-medium mt-2 shadow-md"
+                disabled={isLoading}
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3 px-4 rounded-lg transition font-medium mt-2 shadow-md disabled:opacity-70 flex justify-center items-center"
               >
-                {isLogin ? 'Sign In' : 'Create Account'}
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </>
+                ) : isLogin ? 'Sign In' : 'Create Account'}
               </button>
 
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+              <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 text-center">
                 <button
                   type="button"
-                  className="flex items-center justify-center py-2.5 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+                  onClick={() => {
+                    setIsLogin(!isLogin);
+                    setAuthError('');
+                  }}
+                  className="text-gray-600 hover:text-black transition font-medium"
                 >
-                  <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" className="h-5 w-5 mr-2" />
-                  Google
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center justify-center py-2.5 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-                >
-                  <img src="https://www.svgrepo.com/show/503338/facebook.svg" alt="Facebook" className="h-5 w-5 mr-2" />
-                  Facebook
+                  {isLogin 
+                    ? "Don't have an account? Sign up" 
+                    : "Already have an account? Sign in"}
                 </button>
               </div>
             </form>
-            
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 text-center">
-              <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-gray-600 hover:text-black transition font-medium"
-              >
-                {isLogin 
-                  ? "Don't have an account? Sign up" 
-                  : "Already have an account? Sign in"}
-              </button>
-            </div>
-
-            <button 
-              onClick={() => setShowAuthModal(false)} 
-              className="absolute top-4 right-4 text-white hover:text-gray-200 p-1 rounded-full transition"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
           </div>
         </div>
       )}
