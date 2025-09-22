@@ -167,26 +167,7 @@ const Login = () => {
           </div>
         </motion.div>
 
-        {/* Demo Accounts */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="bg-white rounded-lg shadow-md p-4"
-        >
-          <h3 className="text-sm font-medium text-[#484848] mb-3">Demo Accounts:</h3>
-          <div className="space-y-2 text-xs text-[#6c6c6c]">
-            <div>
-              <strong>Customer:</strong> customer@bayambook.com / password123
-            </div>
-            <div>
-              <strong>Gym Owner:</strong> owner@bayambook.com / password123
-            </div>
-            <div>
-              <strong>Admin:</strong> admin@bayambook.com / password123
-            </div>
-          </div>
-        </motion.div>
+    
       </div>
     </div>
   )

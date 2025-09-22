@@ -50,10 +50,10 @@ const Home = () => {
   ]
 
   const stats = [
-    { number: '25+', label: 'Gyms', icon: Dumbbell },
-    { number: '1200+', label: 'Members', icon: Users },
+    { number: '15+', label: 'Gyms', icon: Dumbbell },
+    { number: '900+', label: 'Members', icon: Users },
     { number: '12+', label: 'Cities', icon: MapPin },
-    { number: '4.9', label: 'Rating', icon: Star }
+    { number: '4.7', label: 'Rating', icon: Star }
   ]
 
   const features = [
@@ -132,7 +132,7 @@ const Home = () => {
                         <p className="text-gray-200 text-sm">First month free!</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-secondary-400 font-bold text-lg">NPR 0</p>
+                        <p className="text-secondary-400 font-bold text-lg">NPR 2,000</p>
                         <p className="text-gray-200 text-sm line-through">NPR 3,500</p>
                       </div>
                     </div>
@@ -148,7 +148,7 @@ const Home = () => {
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm">This month</p>
-                    <p className="font-bold text-gray-900">+1.5k new members</p>
+                    <p className="font-bold text-gray-900">+0.5k new members</p>
                   </div>
                 </div>
               </div>

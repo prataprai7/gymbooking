@@ -118,8 +118,8 @@ const realGyms = [
     isVerified: false,
     isBoosted: true,
     images: [
-      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=compress&cs=tinysrgb&w=800',
-      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=compress&cs=tinysrgb&w=800'
+      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=compress&cs=tinysrgb&w=800',
+      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=compress&cs=tinysrgb&w=800'
     ]
   },
   {
@@ -190,8 +190,8 @@ const realGyms = [
     isVerified: true,
     isBoosted: true,
     images: [
-      'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=compress&cs=tinysrgb&w=800',
-      'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=compress&cs=tinysrgb&w=800'
+      'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=compress&cs=tinysrgb&w=800',
+      'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=compress&cs=tinysrgb&w=800'
     ]
   }
 ];

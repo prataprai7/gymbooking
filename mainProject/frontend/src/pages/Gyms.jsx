@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import axios from 'axios'
 import { 
+  Search, 
   MapPin, 
   Star, 
-  Filter, 
-  Search, 
+  Users, 
+  Dumbbell, 
   SlidersHorizontal,
-  Grid3X3,
-  List,
   TrendingUp,
-  Users,
-  Dumbbell
+  Grid3X3,
+  List
 } from 'lucide-react'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 import BookingForm from '../components/BookingForm'
 
 const Gyms = () => {
   const [gyms, setGyms] = useState([])
   const [loading, setLoading] = useState(true)
+  const [viewMode, setViewMode] = useState('grid')
+  const [showFilters, setShowFilters] = useState(false)
+  const [selectedGym, setSelectedGym] = useState(null)
+  const [showBookingForm, setShowBookingForm] = useState(false)
   const [filters, setFilters] = useState({
     search: '',
     city: '',
@@ -29,231 +33,24 @@ const Gyms = () => {
     sortBy: 'createdAt',
     sortOrder: 'DESC'
   })
-  const [showFilters, setShowFilters] = useState(false)
-  const [viewMode, setViewMode] = useState('grid')
-  const [showBookingForm, setShowBookingForm] = useState(false)
-  const [selectedGym, setSelectedGym] = useState(null)
 
-  // Fetch gyms from API
   useEffect(() => {
-    const fetchGyms = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get('/api/gyms');
-        if (response.data && response.data.gyms) {
-          setGyms(response.data.gyms);
-        } else {
-          console.warn('No gyms found in API response, using real gym data');
-          setGyms(realGyms);
-        }
-      } catch (error) {
-        console.error('Error fetching gyms:', error);
-        // Fallback to real gym data if API fails
-        setGyms(realGyms);
-        console.warn('Using real gym data. Booking functionality will work with this data.');
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchGyms()
+  }, [])
 
-    fetchGyms();
-  }, []);
-
-  // Real gyms with proper data
-  const realGyms = [
-    {
-      id: 'gym-1',
-      name: 'Fitness First Nepal',
-      images: [
-        'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'Durbar Marg, Kathmandu',
-      city: 'Kathmandu',
-      state: 'Bagmati',
-      monthlyPrice: 4500,
-      annualPrice: 45000,
-      rating: 4.8,
-      totalReviews: 156,
-      capacity: 100,
-      facilities: ['Parking', 'Shower', 'Locker', 'Wifi', 'AC', 'Personal Trainer', 'Group Classes'],
-      isBoosted: true,
-      isVerified: true,
-      description: 'Premium fitness center with state-of-the-art equipment, professional trainers, and diverse workout programs. Perfect for both beginners and advanced fitness enthusiasts.',
-      openingHours: '6:00 AM - 10:00 PM',
-      phone: '+977-1-4444444',
-      email: 'info@fitnessfirstnepal.com',
-      website: 'https://fitnessfirstnepal.com'
-    },
-    {
-      id: 'gym-2',
-      name: 'Power House Gym & Fitness',
-      images: [
-        'https://images.unsplash.com/photo-1581009137042-c552e485697a?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'Lakeside, Pokhara',
-      city: 'Pokhara',
-      state: 'Gandaki',
-      monthlyPrice: 3500,
-      annualPrice: 35000,
-      rating: 4.6,
-      totalReviews: 89,
-      capacity: 75,
-      facilities: ['Parking', 'Shower', '24/7 Access', 'Group Classes', 'Yoga', 'Cardio Zone'],
-      isBoosted: false,
-      isVerified: true,
-      description: 'Modern fitness facility with comprehensive equipment, group classes, and personal training services. Great community atmosphere for all fitness levels.',
-      openingHours: '5:00 AM - 11:00 PM',
-      phone: '+977-61-5555555',
-      email: 'contact@powerhousepokhara.com',
-      website: 'https://powerhousepokhara.com'
-    },
-    {
-      id: 'gym-3',
-      name: 'Iron Paradise Strength & Conditioning',
-      images: [
-        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'New Road, Kathmandu',
-      city: 'Kathmandu',
-      state: 'Bagmati',
-      monthlyPrice: 5500,
-      annualPrice: 55000,
-      rating: 4.9,
-      totalReviews: 234,
-      capacity: 60,
-      facilities: ['Parking', 'Shower', 'Sauna', 'Pool', 'Personal Trainer', 'CrossFit', 'Olympic Lifting'],
-      isBoosted: true,
-      isVerified: true,
-      description: 'Elite strength and conditioning facility specializing in powerlifting, Olympic lifting, and functional fitness. Professional coaching for serious athletes.',
-      openingHours: '5:00 AM - 12:00 AM',
-      phone: '+977-1-6666666',
-      email: 'info@ironparadise.com',
-      website: 'https://ironparadise.com'
-    },
-    {
-      id: 'gym-4',
-      name: 'Fit Nation Health Club',
-      images: [
-        'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'Baneshwor, Kathmandu',
-      city: 'Kathmandu',
-      state: 'Bagmati',
-      monthlyPrice: 3800,
-      annualPrice: 38000,
-      rating: 4.4,
-      totalReviews: 98,
-      capacity: 80,
-      facilities: ['Parking', 'Shower', 'Yoga Studio', 'Cafe', 'Cardio Equipment', 'Free Weights'],
-      isBoosted: false,
-      isVerified: true,
-      description: 'Comprehensive health club offering fitness, yoga, and wellness programs. Modern equipment with certified trainers and nutrition guidance.',
-      openingHours: '6:00 AM - 9:00 PM',
-      phone: '+977-1-7777777',
-      email: 'hello@fitnationnepal.com',
-      website: 'https://fitnationnepal.com'
-    },
-    {
-      id: 'gym-5',
-      name: 'Muscle Factory Bodybuilding Gym',
-      images: [
-        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'Chabahil, Kathmandu',
-      city: 'Kathmandu',
-      state: 'Bagmati',
-      monthlyPrice: 4200,
-      annualPrice: 42000,
-      rating: 4.7,
-      totalReviews: 145,
-      capacity: 50,
-      facilities: ['Parking', 'Shower', 'CrossFit', 'Personal Training', 'Supplement Shop', 'Competition Prep'],
-      isBoosted: true,
-      isVerified: false,
-      description: 'Specialized bodybuilding and strength training facility. Expert coaching for muscle building, competition preparation, and powerlifting.',
-      openingHours: '5:00 AM - 11:00 PM',
-      phone: '+977-1-8888888',
-      email: 'info@musclefactorynepal.com',
-      website: 'https://musclefactorynepal.com'
-    },
-    {
-      id: 'gym-6',
-      name: 'Zen Yoga & Wellness Center',
-      images: [
-        'https://images.unsplash.com/photo-1545389336-cf090694435e?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'Mandala Street, Pokhara',
-      city: 'Pokhara',
-      state: 'Gandaki',
-      monthlyPrice: 2800,
-      annualPrice: 28000,
-      rating: 4.5,
-      totalReviews: 78,
-      capacity: 45,
-      facilities: ['Yoga Studio', 'Meditation Room', 'Steam Room', 'Cafe', 'Wellness Programs', 'Ayurvedic Consultation'],
-      isBoosted: false,
-      isVerified: true,
-      description: 'Holistic wellness center combining traditional yoga, meditation, and modern fitness. Perfect for mind-body balance and stress relief.',
-      openingHours: '6:00 AM - 8:00 PM',
-      phone: '+977-61-9999999',
-      email: 'peace@zenyogapokhara.com',
-      website: 'https://zenyogapokhara.com'
-    },
-    {
-      id: 'gym-7',
-      name: 'CrossFit Kathmandu',
-      images: [
-        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'Thamel, Kathmandu',
-      city: 'Kathmandu',
-      state: 'Bagmati',
-      monthlyPrice: 4800,
-      annualPrice: 48000,
-      rating: 4.8,
-      totalReviews: 167,
-      capacity: 40,
-      facilities: ['CrossFit Equipment', 'Olympic Lifting', 'Personal Training', 'Nutrition Coaching', 'Competition Training'],
-      isBoosted: true,
-      isVerified: true,
-      description: 'Official CrossFit affiliate offering high-intensity functional fitness programs. Certified coaches and community-driven workouts.',
-      openingHours: '5:00 AM - 10:00 PM',
-      phone: '+977-1-1111111',
-      email: 'info@crossfitkathmandu.com',
-      website: 'https://crossfitkathmandu.com'
-    },
-    {
-      id: 'gym-8',
-      name: 'Elite Fitness & Sports Club',
-      images: [
-        'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=compress&cs=tinysrgb&w=800',
-        'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=compress&cs=tinysrgb&w=800'
-      ],
-      address: 'Lalitpur, Kathmandu Valley',
-      city: 'Lalitpur',
-      state: 'Bagmati',
-      monthlyPrice: 5200,
-      annualPrice: 52000,
-      rating: 4.9,
-      totalReviews: 189,
-      capacity: 90,
-      facilities: ['Parking', 'Shower', 'Sauna', 'Pool', 'Tennis Court', 'Squash Court', 'Personal Trainer'],
-      isBoosted: true,
-      isVerified: true,
-      description: 'Premium sports and fitness club with comprehensive facilities including swimming pool, tennis courts, and luxury amenities.',
-      openingHours: '6:00 AM - 11:00 PM',
-      phone: '+977-1-2222222',
-      email: 'membership@elitefitnessnepal.com',
-      website: 'https://elitefitnessnepal.com'
+  const fetchGyms = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get('/api/gyms')
+      setGyms(response.data.data || [])
+    } catch (error) {
+      console.error('Error fetching gyms:', error)
+      toast.error('Failed to load gyms')
+      setGyms([])
+    } finally {
+      setLoading(false)
     }
-  ];
+  }
 
   const cities = [
     'Kathmandu', 'Pokhara', 'Lalitpur', 'Bhaktapur', 'Biratnagar',
@@ -297,10 +94,6 @@ const Gyms = () => {
   }
 
   const handleBookNow = (gym) => {
-    if (gym.id.startsWith('sample-gym-')) {
-      alert('This is sample data. Please use real gym data for booking functionality.');
-      return;
-    }
     setSelectedGym(gym)
     setShowBookingForm(true)
   }

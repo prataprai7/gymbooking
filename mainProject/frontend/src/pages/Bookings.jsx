@@ -11,8 +11,6 @@ import {
   Users,
   Activity,
   CheckCircle,
-  XCircle,
-  AlertCircle,
   Clock as ClockIcon
 } from 'lucide-react';
 
